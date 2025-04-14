@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../core-modules/service/auth/auth.service';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 

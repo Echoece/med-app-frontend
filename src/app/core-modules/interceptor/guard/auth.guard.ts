@@ -7,11 +7,16 @@ import {
     Router,
     RouterStateSnapshot
 } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../../service/auth/auth.service';
 import { take } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 
+
+/**
+ * This guards check if the user is logged in or not.
+ *
+ * */
 @Injectable({
     providedIn: 'root',
 })

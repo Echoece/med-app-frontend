@@ -4,7 +4,7 @@ import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Documentation } from './app/pages/documentation/documentation';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
-import { AuthGuard } from './app/auth/AuthGuard';
+import { AuthGuard } from './app/core-modules/interceptor/guard/auth.guard';
 
 export const appRoutes: Routes = [
     {
