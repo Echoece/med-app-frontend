@@ -1,0 +1,21 @@
+<div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+
+    <div class="card mb-0" *ngFor="let card of cards">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">{{ card.title }}</span>
+                <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{ card.value }}</div>
+            </div>
+            <div
+                class="flex items-center justify-center rounded-border"
+                [ngClass]="card.bgColor"
+                style="width: 2.5rem; height: 2.5rem"
+            >
+                <i class="pi !text-xl" [ngClass]="[card.icon, card.iconColor]"></i>
+            </div>
+        </div>
+        <span class="text-primary font-medium">{{ card.change }}</span>
+        <span class="text-muted-color"> {{ card.note }}</span>
+    </div>
+
+</div>

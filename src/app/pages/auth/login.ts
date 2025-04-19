@@ -10,6 +10,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
 import { AuthService } from '../../core-modules/service/auth/auth.service';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { isValidEmail } from '../../core-modules/helpers/http.helper';
 
 
 @Component({
@@ -86,7 +87,7 @@ export class Login {
             return;
         }
 
-        if (!this.isValidEmail(this.email)) {
+        if (!isValidEmail(this.email)) {
             this.errorMessage = 'Invalid email format!';
             return;
         }
@@ -116,12 +117,7 @@ export class Login {
         });
     }
 
-    // Helper: Check if email is valid
-    private isValidEmail(email: string): boolean {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    // Error handling (keep your existing logic)
+    // Error handling
     private handleLoginError(error: any) {
         if (error.status === 401) {
             this.errorMessage = 'Invalid email or password';

@@ -22,9 +22,22 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'My Menu',
+                label: 'Med App Menu',
                 items: [
-                    {label: 'Dashboard', icon: PrimeIcons.STAR, routerLink: ['/customDashboard']},
+                    {label: 'Dashboard', icon: PrimeIcons.HOME, routerLink: ['v1/dashboard']},
+                    {
+                        label: 'Patient',
+                        icon: PrimeIcons.EYE,
+                        items: [
+                            {label: 'Patient Management', icon: PrimeIcons.HOME, routerLink: ['v1/patient']},
+                            {label: 'Patient Prescription', icon: PrimeIcons.HOME, routerLink: ['v1/patient/prescription']},
+                        ]
+                    },
+                    {label: 'Drug', icon: PrimeIcons.BOLT, routerLink: ['v1/drug']},
+                    {label: 'Todo', icon: PrimeIcons.BOOK, routerLink: ['v1/todo']},
+
+                    {separator: true},
+                    {label: 'Settings', icon: PrimeIcons.MICROCHIP, routerLink: ['v1/settings']},
                 ]
             },
             {

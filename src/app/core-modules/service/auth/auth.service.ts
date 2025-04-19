@@ -4,41 +4,33 @@ import { environment } from '../../../../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { validateToken } from '../jwt.service';
+import { LoginResponse } from '../../model/auth/auth.model';
 
 
 
-interface LoginResponse {
-    id: number;
-    username: string;
-    email: string;
-    type: string; // role
-    token: string;
-    authorities: string[]; // permission
-    enabled :boolean;
-    accountNonLocked: boolean;
-}
-
-
+/*
+*  includes 1. login, logout, getUser,
+* */
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
     private readonly authURL = environment.baseUrl + environment.urlVersion + '/auth';
 
-    // The subject is marked private to prevent external components from directly calling .next() and bypassing your authentication logic
+    // The subject is marked private to prevent external components from directly calling .next() and bypassing authentication logic
     private userSubject = new BehaviorSubject<LoginResponse | null>(null);
 
-    // Exposes the BehaviorSubject as a read-only Observable.
-    // Components/services can subscribe to user$ to reactively get user state updates but cannot modify the state directly.
-    /* Why use asObservable():
-            Prevents external code from calling .next() on the subject (encapsulation).
-            Follows the principle of least privilege.*/
+    // Exposes the BehaviorSubject as a read-only Observable. Components/services can subscribe to user$ to reactively get
+    // user state updates but cannot modify the state directly.
+
+    /* Why use asObservable(): Prevents external code from calling .next() on the subject (encapsulation). Follows the principle of least privilege.*/
     user$ = this.userSubject.asObservable();
 
     constructor(
         private http: HttpClient,
         private router: Router,
-        private service: MessageService
+        private service: MessageService,
     ) {
 
         // updates user information in service
@@ -94,8 +86,10 @@ export class AuthService {
      * Accepts array of roles to check against the user types.
      * */
     hasRole(...roles: string[]): boolean {
-        const user = this.userSubject.value;
-        return !!user && roles.includes(user.type);
+        const userRoles = this.getRoleNames();
+        if (!userRoles) return false;
+
+        return roles.some(role => userRoles.includes(role));
     }
 
     /**
@@ -103,16 +97,16 @@ export class AuthService {
      * */
     hasPermission(required: string | string[]): boolean {
         const user = this.getUser();
-        if (!user || !user.enabled || !user.accountNonLocked || !user.authorities) {
+        const permissions = this.getPermissionNames();
+
+        if (!user || !user.enabled || !user.accountNonLocked || !permissions) {
             return false;
         }
 
-        const roles = user.authorities || [];
-
         // Normalize to array in case string value
-        const requiredRoles = Array.isArray(required) ? required : [required];
+        const requiredPermissions = Array.isArray(required) ? required : [required];
 
-        return requiredRoles.some((role) => roles.includes(role));
+        return requiredPermissions.some(permission => permissions.includes(permission));
     }
 
 
@@ -132,7 +126,7 @@ export class AuthService {
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user');
 
-        if (token && user) {
+        if (token && user && validateToken(token)) {
             try {
                 const parsedUser: LoginResponse = JSON.parse(user);
                 this.userSubject.next(parsedUser);
@@ -151,6 +145,29 @@ export class AuthService {
                 this.router.navigate(['/login']);
             }
         });
+    }
+
+    /**
+     *  This method extracts the role names from the roleList of loginResponse, and convert into an array
+     * */
+
+    private getRoleNames(): string[] | null {
+        const user = this.userSubject.value;
+        if (!user || !user.roleList || user.roleList.length === 0) {
+            return null;
+        }
+        return user.roleList.map(role => role.name);
+    }
+
+    /**
+     *  This method extracts the permission names from the permissionList of loginResponse, and convert into an array
+     * */
+    private getPermissionNames(): string[] | null {
+        const user = this.userSubject.value;
+        if (!user || !user.permissionList || user.permissionList.length === 0) {
+            return null;
+        }
+        return user.permissionList.map(permission => permission.name);
     }
 }
 

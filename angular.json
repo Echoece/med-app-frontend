@@ -7,7 +7,21 @@
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
-                    "style": "scss"
+                    "style": "scss",
+                    "skipTests": true,
+                    "path": "src/app/core-modules/component"
+                },
+                "@schematics/angular:service": {
+                    "skipTests": true,
+                    "path": "src/app/core-modules/service"
+                },
+                "@schematics/angular:directive": {
+                    "path": "src/app/core-modules/directives",
+                    "skipTests": true
+                },
+                "@schematics/angular:pipe": {
+                    "path": "src/app/core-modules/pipes",
+                    "skipTests": true
                 }
             },
             "root": "",

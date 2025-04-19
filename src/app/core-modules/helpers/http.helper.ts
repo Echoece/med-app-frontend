@@ -54,3 +54,8 @@ export function makeParams(opts: { httpParams?: HttpParams, queryParams: any }) 
 
     return httpParams;
 }
+
+
+export function isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}

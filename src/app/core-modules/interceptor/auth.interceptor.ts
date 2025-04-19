@@ -12,11 +12,15 @@ import { Observable } from 'rxjs';
 export class AuthInterceptor implements HttpInterceptor {
     constructor(private authService: AuthService) {}
 
-    /* TODO: implement logic to handle different token for different backend service calling,
-        maybe have a list of services and have a custom header sent (for example, service: google), check for that header
-        and add token or authentication accordingly.
+    /*  adds authentication token in request header for each request if token exists in localstorage, in case we want to skip it,
+        we can add skipAuthToken header in request, it will skip the process.
         */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (req.headers.has('skipAuthToken')) {
+            req = req.clone({ headers: req.headers.delete('skipAuthToken') });
+            return next.handle(req);
+        }
+
         const token = this.authService.getToken();
 
         if (token) {

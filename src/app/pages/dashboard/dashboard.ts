@@ -4,7 +4,6 @@ import { StatsWidget } from './components/statswidget';
 import { RecentSalesWidget } from './components/recentsaleswidget';
 import { BestSellingWidget } from './components/bestsellingwidget';
 import { RevenueStreamWidget } from './components/revenuestreamwidget';
-import { AuthService } from '../../core-modules/service/auth/auth.service';
 
 @Component({
     selector: 'app-dashboard',
